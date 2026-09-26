@@ -1,19 +1,19 @@
 
 import foodModel from "../models/foodModel.js";
 import fs from "fs";
+import { uploadFile } from "../services/storage.service.js";
 
 // add food item
 
 const addFood = async (req, res) => {
+    const result = await uploadFile(req.file.buffer)
     
-    let image_filename = `${req.file.filename}`;
-
   const food = new foodModel({
     name: req.body.name,
     description: req.body.description,
     price: req.body.price,
     category: req.body.category,
-    image: image_filename,
+    image: result.url,
   });
   try {
     food.save();
