@@ -9,5 +9,19 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!--ChatBot Code-->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
+      rel="stylesheet"
+    />
+    <script type="module">
+      import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+      createChat({
+        webhookUrl: "https://scripterabhi.app.n8n.cloud/webhook/cf4db78c-9db7-4732-a4dc-9b0055f22794/chat",
+      });
+    </script>
   </body>
 </html>
