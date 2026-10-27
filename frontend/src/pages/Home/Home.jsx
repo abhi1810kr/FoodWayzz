@@ -1,53 +1,59 @@
 import './Home.css'
 import Header from '../../components/header/Header'
 import ExploreMenu from '../../components/exploreMenu/ExploreMenu'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import FoodDisplay from '../../components/foodDisplay/FoodDisplay'
 import AppDownload from '../../components/appDownload/AppDownload'
-
+import { StoreContext } from '../../context/storeContext'
 import { createChat } from '@n8n/chat'
 import '@n8n/chat/style.css'
 import Loading from '../Loading/Loading'
 
 const Home = () => {
+    const {url} = useContext(StoreContext)
+
   const [category, setCategory] = useState("All")
    const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
+  
+useEffect(() => {
+  let cancelled = false;
 
-    const checkConnection = async () => {
-      try {
-        const response = await axios.get(`${url}/api/db-connection`)
+  const checkConnection = async () => {
+    try {
+      const response = await fetch(`${url}/api/db-connection`);
 
-        if (!response.ok) {
-          throw new Error("Database not ready");
-        }
-
-        const data = await response.json();
-
-        if (!cancelled) {
-          setConnected(data.connected);
-          setLoading(!data.connected);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setConnected(false);
-          setLoading(true);
-        }
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
       }
-    };
 
-    checkConnection();
+      const data = await response.json();
 
-    const interval = setInterval(checkConnection, 2000);
+      if (!cancelled) {
+        setConnected(data.connected === true);
+        setLoading(false);
+      }
+    } catch (error) {
+      if (!cancelled) {
+        setConnected(false);
+        setLoading(false);
+      }
 
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [loading, connected]);
+      console.error("Database connection check failed:", error);
+    }
+  };
+
+  checkConnection();
+
+  const interval = setInterval(checkConnection, 2000);
+
+  return () => {
+    cancelled = true;
+    clearInterval(interval);
+  };
+}, [url]);
+
 
   useEffect(() => {
     createChat({
@@ -75,9 +81,13 @@ const Home = () => {
         category={category}
         setCategory={setCategory}
       />
-      {
-        (loading || !connected) ? <Loading /> : <FoodDisplay category={category} />
-      }
+     {loading ? (
+  <Loading />
+) : connected ? (
+  <FoodDisplay category={category} />
+) : (
+  <p>Database connection failed. Please try again.</p>
+)}
       
       
       <AppDownload />
