@@ -47,7 +47,7 @@ const Home = () => {
       cancelled = true;
       clearInterval(interval);
     };
-  }, []);
+  }, [loading, connected]);
 
   useEffect(() => {
     createChat({
