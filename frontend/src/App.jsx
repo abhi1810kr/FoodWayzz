@@ -10,6 +10,7 @@ import { useState } from 'react'
 import LoginPopup from './components/loginPopup/LoginPopup'
 import Verify from './pages/Verify/Verify'
 import MyOrders from './pages/MyOrders/MyOrders'
+import NotFound from './pages/NotFound/NotFound'
 
 const App = () => {
 
@@ -26,6 +27,7 @@ const App = () => {
         <Route path='/order' element={<PlaceOrder />} />
         <Route path='/verify' element={<Verify />} />
         <Route path='/myorders' element={<MyOrders />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
     <Footer />

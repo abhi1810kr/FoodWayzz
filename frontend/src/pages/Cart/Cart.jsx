@@ -1,11 +1,23 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import "./Cart.css";
 import { StoreContext } from "../../context/storeContext";
-// import { food_list } from "../../assets/frontend_assets/assets";
 import { useNavigate } from "react-router-dom";
-const Cart = () => {
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } =
+const Cart = ({}) => {
+  const { cartItems, token, food_list, removeFromCart, getTotalCartAmount } =
     useContext(StoreContext);
+
+  const handleCheckout = () => {
+    let amount = getTotalCartAmount();
+    if(amount > 0){
+      navigate("/order");
+    }
+    else if(!token){
+      alert("Please Login/SignUp");
+    }
+    else{
+      alert("Please select some food items first..")
+    }
+  }  
 
   const navigate = useNavigate();
 
@@ -26,7 +38,7 @@ const Cart = () => {
           if (cartItems[item._id] > 0) {
             return (
               <>
-                <div className="cart-items-title cart-items-item">
+                <div key={index} className="cart-items-title cart-items-item">
                   <img src={item.image} alt="" />
                   <p>{item.name}</p>
                   <p>₹{item.price}</p>
@@ -61,13 +73,7 @@ const Cart = () => {
               <b>₹{getTotalCartAmount() > 0 ? getTotalCartAmount() + 10 : 0}</b>
             </div>
           </div>
-          <button
-            onClick={
-              getTotalCartAmount() > 0
-                ? () => navigate("/order")
-                : () => alert("Please select food item")
-            }
-          >
+          <button onClick={handleCheckout}>
             Proceed To Checkout
           </button>
         </div>
