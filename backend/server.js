@@ -31,6 +31,21 @@ connectDB();
 app.use("/api/food", foodRouter)
 app.use("/images", express.static('uploads'))
 
+//api for database connection check
+app.get('/api/db-connection', (req, res)=>{
+     const connected = mongoose.connection.readyState === 1;
+
+  if (connected) {
+    return res.status(200).json({
+      connected: true,
+    });
+  }
+
+  res.status(503).json({
+    connected: false,
+  });
+}) 
+
 app.get('/', (req, res)=>{
     res.send("Server Started")
 })
