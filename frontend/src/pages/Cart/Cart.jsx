@@ -8,12 +8,13 @@ const Cart = ({}) => {
 
   const handleCheckout = () => {
     let amount = getTotalCartAmount();
-    if(amount > 0){
-            navigate("/order");
-    }
-    else if(!token){
+    
+    if(!token){
       alert("Please Login/SignUp");
     
+    }
+    else if(amount > 0){
+            navigate("/order");
     }
     else{
       alert("Please select some food items first..");
