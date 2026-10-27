@@ -4,17 +4,18 @@ import ExploreMenu from '../../components/exploreMenu/ExploreMenu'
 import { useState, useEffect, useContext } from 'react'
 import FoodDisplay from '../../components/foodDisplay/FoodDisplay'
 import AppDownload from '../../components/appDownload/AppDownload'
-import { StoreContext } from '../../context/storeContext'
 import { createChat } from '@n8n/chat'
 import '@n8n/chat/style.css'
 import Loading from '../Loading/Loading'
 
 const Home = () => {
-    const {url} = useContext(StoreContext)
+  
 
   const [category, setCategory] = useState("All")
    const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(false);
+
+  const connectionCheckurl = "http://localhost:4000/api/db-connection"
 
   
 useEffect(() => {
@@ -22,7 +23,7 @@ useEffect(() => {
 
   const checkConnection = async () => {
     try {
-      const response = await fetch(`${url}/api/db-connection`);
+      const response = await fetch(`${connectionCheckurl}`);
 
       if (!response.ok) {
         throw new Error(`Request failed: ${response.status}`);
@@ -52,7 +53,7 @@ useEffect(() => {
     cancelled = true;
     clearInterval(interval);
   };
-}, [url]);
+}, [connectionCheckurl]);
 
 
   useEffect(() => {

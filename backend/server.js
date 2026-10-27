@@ -6,6 +6,7 @@ import userRouter from "./routes/userRoute.js"
 import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
+import mongoose from "mongoose"
 
 
 
@@ -38,6 +39,7 @@ app.get('/api/db-connection', (req, res)=>{
   if (connected) {
     return res.status(200).json({
       connected: true,
+      message:"Success"
     });
   }
 
